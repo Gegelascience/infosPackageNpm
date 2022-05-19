@@ -3,6 +3,7 @@ import { forkJoin } from 'rxjs';
 import { NpmResponseDownloadCounter } from 'src/app/models/npm-response-download-counter';
 import { NpmResponsePackageInfo } from 'src/app/models/npm-response-package-info';
 import { NpmInfoServiceService } from 'src/app/services/npm-info-service.service';
+import { EChartsOption } from 'echarts';
 
 @Component({
   selector: 'app-show-info',
@@ -13,9 +14,11 @@ export class ShowInfoComponent implements OnInit {
 
   @Input() packageName:string = ""
 
-   totalDownload = 0;
+  totalDownload = 0;
 
-   creationDate: Date = new Date();
+  creationDate: Date = new Date();
+
+  chartDownloadByYearOption:any
   
   constructor(private infoNpmService: NpmInfoServiceService) { }
 
@@ -27,6 +30,8 @@ export class ShowInfoComponent implements OnInit {
           const today: Date = new Date()
           this.creationDate= new Date(data.time.created)
           const listInterval = []
+          const listYear:string[] = []
+          listYear.push(this.creationDate.getFullYear().toString())
           if (today.getFullYear() == this.creationDate.getFullYear()){
             listInterval.push({startInterval:this.creationDate, endInterval:today})
           } else {
@@ -34,10 +39,12 @@ export class ShowInfoComponent implements OnInit {
             listInterval.push({startInterval:this.creationDate, endInterval:new Date(this.creationDate.getFullYear() + "-12-31")})
             let indexYear = this.creationDate.getFullYear() +1
             while (indexYear < today.getFullYear()) {
+              listYear.push(indexYear.toString())
               listInterval.push({startInterval:new Date(indexYear + "-01-01"), endInterval:new Date(indexYear + "-12-31")})
               indexYear +=1
             }
             listInterval.push({startInterval:new Date(indexYear + "-01-01"), endInterval:today})
+            listYear.push(today.getFullYear().toString())
           }
 
 
@@ -50,21 +57,51 @@ export class ShowInfoComponent implements OnInit {
           ).subscribe(
             {
               next: (listResult: NpmResponseDownloadCounter[]) => {
+                const downloadByYear:number[] = []
                 listResult.forEach((res) => {
+                  let downloadYearTemp = 0
+
                   res.downloads.forEach((downloadDay) => {
                     this.totalDownload += downloadDay.downloads
+                    downloadYearTemp += downloadDay.downloads
                   })
+                  downloadByYear.push(downloadYearTemp)
+
+
                 })
+                console.log(listYear)
+                console.log(downloadByYear)
+
+                this.chartDownloadByYearOption = {
+                  title:{
+                    text:"Téléchargement par année",
+                    
+                  },
+                  xAxis: {
+                    name:"Années",
+                    nameLocation:"center",
+                    type: 'category',
+                    data: listYear,
+                  },
+                  yAxis: {
+                    type:"value",
+                    name:"Nombre de Téléchargements"
+                  },
+                  series: [
+                    {
+                      name:"Téléchargements",
+                      data: downloadByYear,
+                      type: 'line',
+                    },
+                  ],
+                };
+
               },
               error: (e) => {
                 console.log(e)
               }
             }
           )
-
-          //this.infoNpmService.getPackageDownloadCount(this.packageName,this.getDateFormat(createdData), this.getDateFormat(today)).subscribe(counter => {
-          //console.log(counter)
-          //})
 
         },
         error: (e:any) => {
