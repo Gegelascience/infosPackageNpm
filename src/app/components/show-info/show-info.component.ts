@@ -26,7 +26,6 @@ export class ShowInfoComponent implements OnInit {
           console.log(data)
           const today: Date = new Date()
           this.creationDate= new Date(data.time.created)
-          //todos test si plus de 18 mois => split
           const listInterval = []
           if (today.getFullYear() == this.creationDate.getFullYear()){
             listInterval.push({startInterval:this.creationDate, endInterval:today})
