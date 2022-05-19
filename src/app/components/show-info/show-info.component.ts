@@ -1,5 +1,7 @@
 import { Component, OnInit,Input } from '@angular/core';
 import { forkJoin } from 'rxjs';
+import { NpmResponseDownloadCounter } from 'src/app/models/npm-response-download-counter';
+import { NpmResponsePackageInfo } from 'src/app/models/npm-response-package-info';
 import { NpmInfoServiceService } from 'src/app/services/npm-info-service.service';
 
 @Component({
@@ -20,7 +22,7 @@ export class ShowInfoComponent implements OnInit {
   ngOnInit(): void {
     this.infoNpmService.getPackageInfo(this.packageName).subscribe(
       {
-        next: (data:any) => {
+        next: (data:NpmResponsePackageInfo) => {
           console.log(data)
           const today: Date = new Date()
           this.creationDate= new Date(data.time.created)
@@ -48,10 +50,9 @@ export class ShowInfoComponent implements OnInit {
             listRequest
           ).subscribe(
             {
-              next: (listResult) => {
-                console.log("fork", listResult)
-                listResult.forEach((res:any) => {
-                  res.downloads.forEach((downloadDay: any) => {
+              next: (listResult: NpmResponseDownloadCounter[]) => {
+                listResult.forEach((res) => {
+                  res.downloads.forEach((downloadDay) => {
                     this.totalDownload += downloadDay.downloads
                   })
                 })
@@ -67,7 +68,7 @@ export class ShowInfoComponent implements OnInit {
           //})
 
         },
-        error: (e) => {
+        error: (e:any) => {
           console.log(e)
         }
       })
