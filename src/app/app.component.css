@@ -1,0 +1,8 @@
+.listPackage {
+    display: flex;
+    flex-direction: column;
+}
+
+.packageContainerParent {
+    flex:1
+}

@@ -3,7 +3,6 @@ import { forkJoin } from 'rxjs';
 import { NpmResponseDownloadCounter } from 'src/app/models/npm-response-download-counter';
 import { NpmResponsePackageInfo } from 'src/app/models/npm-response-package-info';
 import { NpmInfoServiceService } from 'src/app/services/npm-info-service.service';
-import { EChartsOption } from 'echarts';
 
 @Component({
   selector: 'app-show-info',
@@ -85,10 +84,19 @@ export class ShowInfoComponent implements OnInit {
                     nameLocation:"center",
                     type: 'category',
                     data: listYear,
+                    nameTextStyle:{
+                      fontStyle:"italic",
+                      verticalAlign:"top",
+                      lineHeight:50
+                    }
                   },
                   yAxis: {
                     type:"value",
-                    name:"Nombre de Téléchargements"
+                    name:"Nombre de Téléchargements",
+                    nameTextStyle:{
+                      fontStyle:"italic",
+                    }
+
                   },
                   series: [
                     {

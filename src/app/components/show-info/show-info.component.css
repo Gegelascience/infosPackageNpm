@@ -8,3 +8,8 @@
   justify-content: center;
   align-items: center;
 }
+
+.limitMargin {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
