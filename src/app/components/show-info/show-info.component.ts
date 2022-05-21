@@ -68,8 +68,6 @@ export class ShowInfoComponent implements OnInit {
 
 
                 })
-                console.log(listYear)
-                console.log(downloadByYear)
 
                 this.chartDownloadByYearOption = {
                   title:{
