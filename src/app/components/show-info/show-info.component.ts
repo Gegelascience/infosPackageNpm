@@ -77,6 +77,9 @@ export class ShowInfoComponent implements OnInit {
                     text:"Téléchargement par année",
                     
                   },
+                  tooltip: {
+                    trigger: 'axis'
+                  },
                   xAxis: {
                     name:"Années",
                     nameLocation:"center",

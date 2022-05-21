@@ -1,3 +1,10 @@
 .demo-chart {
     height: 400px;
   }
+
+.infoContainer {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
